@@ -11,7 +11,7 @@ Assemble and explain a minimal, non-mainstream OS stack · Intermediate to advan
 | `judge/osprobe.c` | Sample primitive-conformance probe for L2 and L4. The judges' copy differs only in its seed, which changes every run. |
 | `judge/verify.yaml.template` | Copy to your repository as `verify.yaml` and fill it in. |
 
-In the image, `judge/` is at `/opt/os-track/judge`, and base sources and images are under `/opt/os-track/src/bases` (BusyBox and Linux are at `/opt/os-track/src`). With the `full` image you also get FreeBSD, OpenBSD, NetBSD, 9front, Haiku and Redox images in `/opt/os-track/src/bases/images`.
+In the image, `judge/` is at `/opt/os-track/catv/judge`, and base sources and images are under `/opt/os-track/src/bases` (BusyBox and Linux are at `/opt/os-track/src`). With the `full` image you also get FreeBSD, OpenBSD, NetBSD, 9front, Haiku and Redox images in `/opt/os-track/src/bases/images`.
 
 ## The machine your OS boots on
 
@@ -28,9 +28,9 @@ Without `boot.kernel`, SeaBIOS boots the system disk (bring your own boot loader
 ## Run the harness
 
 ```sh
-cp /opt/os-track/judge/verify.yaml.template /work/myos/verify.yaml   # then edit it
-/opt/os-track/judge/verify.sh --config /work/myos/verify.yaml --verbose
-/opt/os-track/judge/verify.sh --config /work/myos/verify.yaml --runs 10 --no-perf   # Robustness
+cp /opt/os-track/catv/judge/verify.yaml.template /work/myos/verify.yaml   # then edit it
+/opt/os-track/catv/judge/verify.sh --config /work/myos/verify.yaml --verbose
+/opt/os-track/catv/judge/verify.sh --config /work/myos/verify.yaml --runs 10 --no-perf   # Robustness
 ```
 
 What one run does (all timing on the host):
@@ -103,54 +103,21 @@ The implementation uses Linux, Buildroot and BusyBox to provide a minimal usersp
 
 ## 3. Project Structure
 
-```text
-04-CatV-Minimalist-Stack/
-│
-├── README.md
-├── verify.yaml
-│
-├── backups/
-│   └── l0-working/
-│       ├── buildroot.config
-│       ├── bzImage
-│       ├── inittab
-│       ├── kernel.config
-│       ├── system.img
-│       └── verify.yaml
-│
-├── build/
-│   ├── .config
-│   ├── .config.old
-│   ├── Makefile
-│   ├── assets.img
-│   ├── data.img
-│   ├── system.img
-│   ├── build/
-│   │   ├── linux-6.12.9/
-│   │   ├── busybox-1.37.0/
-│   │   └── other generated packages/
-│   ├── host/
-│   ├── images/
-│   │   ├── bzImage
-│   │   └── rootfs.ext2
-│   ├── staging/
-│   └── target/
-│
-├── judge/
-│   ├── osprobe.c
-│   ├── qemu.sh
-│   ├── verify.py
-│   ├── verify.sh
-│   └── verify.yaml.template
-│
-└── overlay/
-    ├── etc/
-    │   └── init.d/
-    └── usr/
-        └── sbin/
-```
+The repository is organized as follows:
 
-The `build/` directory contains generated Buildroot files, kernel outputs, host tools and disk images. These are build artifacts rather than the main project source files.
+- `README.md` — project documentation
+- `ARCHITECTURE.md` — architecture manifest and self-scoring
+- `build.sh` — Buildroot build script
+- `buildroot.config` — Buildroot configuration
+- `kernel.config` — Linux kernel configuration
+- `verify.yaml` — official verification configuration
+- `build/` — bootable system image and kernel image
+- `judge/` — verification-related reference files
+- `overlay/` — custom root filesystem files
+- `backups/` — earlier working configuration backups
+
+Most intermediate Buildroot build files are excluded from version control.
+
 
 ## 4. System Configuration
 
@@ -329,8 +296,9 @@ The final ten-run verification completed successfully.
 | File | Description |
 |---|---|
 | `verify.yaml` | Project verification configuration |
-| `build/.config` | Buildroot configuration |
-| `build/build/linux-6.12.9/.config` | Linux kernel configuration |
+| `build.sh` | Buildroot build script for reproducing the system image |
+| `buildroot.config` | Buildroot configuration |
+| `kernel.config` | Linux kernel configuration |
 | `judge/osprobe.c` | OS primitive and SMP benchmark source |
 | `judge/qemu.sh` | QEMU launch profile reference |
 | `judge/verify.py` | Verification implementation reference |
@@ -338,6 +306,7 @@ The final ten-run verification completed successfully.
 | `overlay/` | Custom root filesystem files |
 | `backups/` | Earlier working configuration backups |
 
+The build script is provided for reproducibility. A clean rebuild from a fresh checkout has not yet been completed and should be independently verified.
 The official evaluation environment uses its own judge scripts. The copies in `judge/` are included as project references.
 
 ## 9. Submission Deliverables
