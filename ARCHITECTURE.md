@@ -152,41 +152,38 @@ Final recorded result:
 
 ## 9. Esotericism Self-Scoring
 
-This section evaluates how specialized or uncommon the technologies
-and implementation choices used in the project are.
+The challenge defines esotericism using a layer-based score.
 
-### Scoring Scale
+The total layer value is E, with the final esotericism score calculated as:
 
-| Score | Description |
-|---|---|
-| 1 | Mainstream technology or conventional implementation |
-| 2 | Specialized technology commonly used in its domain |
-| 3 | Customized or less-common implementation |
-| 4 | Unusual or highly specialized implementation |
-| 5 | Experimental or highly obscure implementation |
+**Esotericism points = 6 × E / 130**
 
-### Component Assessment
+Only components used in the booted image are counted.
 
-| Component | Technology / Implementation | Score | Justification |
+### Layer Assessment
+
+| Layer | Actual implementation | Challenge points | Basis |
 |---|---|---:|---|
-| Kernel | Linux 6.12.9 | 1 | Widely used mainstream kernel |
-| Userspace | BusyBox 1.37.0 | 2 | Specialized minimal embedded userspace |
-| Build system | Buildroot 2025.02 | 2 | Embedded Linux build framework |
-| Virtualization | QEMU TCG | 2 | Established software-emulation environment |
-| Service supervision | Heartbeat supervisor | 3 | Project-specific process supervision |
-| Storage design | Separate QEMU data disk | 2 | Conventional virtual disk persistence |
-| OS verification | Seed-based OS probe | 2 | Specialized automated primitive verification |
-| Kernel configuration | SMP-enabled Linux | 2 | Standard kernel capability configured for the challenge |
+| OS base | Buildroot-based Linux system | +15 | Linux built from source using Buildroot |
+| Boot path | QEMU direct kernel boot (`-kernel`) | 0 | Challenge assigns 0 to QEMU `-kernel` or stock bootloader |
+| Init | Stock BusyBox init | +10 | Minimal stock supervisor/init |
+| C library / syscalls | musl | +15 | Challenge assigns +15 to musl, uClibc, or dietlibc |
+| Userland | BusyBox | +10 | Challenge assigns +10 to BusyBox, Toybox, or 9base |
 
-### Self-Assessment Summary
+### Self-Assessment Calculation
 
-The implementation primarily uses established open-source technologies.
+| Measure | Value |
+|---|---:|
+| Layer total (E) | 50 |
+| Maximum layer total | 130 |
+| Esotericism points (`6 × 50 / 130`) | 2.31 / 6 |
 
-Its project-specific contribution lies in integrating and configuring
-these components into a minimal operating-system environment.
+This is a self-assessment based on the project configuration and boot method.
+It assumes the delivered boot image uses the listed components.
 
-These scores are the project's own assessments, not official
-organizer-assigned scores.
+The project uses established open-source components rather than claiming
+a custom kernel, bootloader, init system, C library, or shell.
+
 
 ## 10. Authored and Configured Components
 
@@ -221,6 +218,21 @@ as original implementations:
 
 The project contribution is the configuration, integration and
 project-specific service implementation built around these components.
+
+### Authored-Work Qualification
+
+The project contains custom heartbeat service and supervision scripts.
+The inspected scripts contain 60 lines in total (28-line supervisor,
+10-line heartbeat service, and 22-line init integration).
+
+These scripts demonstrate project-specific implementation work, but
+they do not meet the challenge's 150-line threshold for an authored init
+component. No qualifying authored component from the challenge's
+technical-depth candidate list is claimed at this stage.
+
+Accordingly, the project does not claim the authored-work gate or
+technical-depth points for an original init, bootloader, libc/syscall
+layer, shell/core utilities, or kernel patch/module.
 
 ## 11. Verification Evidence
 
