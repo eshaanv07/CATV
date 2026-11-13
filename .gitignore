@@ -1,0 +1,11 @@
+# Ignore all generated build output
+/build/*
+
+# Keep bootable deliverables
+!/build/images/
+!/build/images/bzImage
+!/build/images/rootfs.ext2
+!/build/images/start-qemu.sh
+!/build/system.img
+!/build/assets.img
+!/build/data.img

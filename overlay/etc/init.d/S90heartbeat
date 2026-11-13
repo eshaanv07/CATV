@@ -1,0 +1,22 @@
+#!/bin/sh
+
+case "$1" in
+    start)
+        echo "Starting heartbeat supervisor..."
+        /usr/sbin/heartbeat-supervisor &
+        echo $! > /var/run/heartbeat-supervisor.pid
+        ;;
+    stop)
+        echo "Stopping heartbeat supervisor..."
+        if [ -f /var/run/heartbeat-supervisor.pid ]; then
+            kill "$(cat /var/run/heartbeat-supervisor.pid)" 2>/dev/null
+            rm -f /var/run/heartbeat-supervisor.pid
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {start|stop}"
+        exit 1
+        ;;
+esac
+
+exit 0

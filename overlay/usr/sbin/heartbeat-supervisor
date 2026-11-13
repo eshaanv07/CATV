@@ -1,0 +1,28 @@
+#!/bin/sh
+
+HEARTBEAT="/usr/sbin/heartbeat"
+child=""
+
+stop_supervisor() {
+    trap '' TERM INT
+
+    if [ -n "$child" ]; then
+        kill "$child" 2>/dev/null
+        wait "$child" 2>/dev/null
+    fi
+
+    exit 0
+}
+
+trap stop_supervisor TERM INT
+
+while true
+do
+    "$HEARTBEAT" &
+    child=$!
+
+    wait "$child"
+    child=""
+
+    sleep 1
+done

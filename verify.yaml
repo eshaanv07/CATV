@@ -1,0 +1,58 @@
+# verify.yaml - your Problem 4 harness configuration.
+# Copy to the root of your repository and fill it in. Paths are relative
+# to this file. Every string below is only ever typed into your guest's
+# serial console (or, for osprobe.host_build, run as an argument list on
+# the host); nothing goes through a host shell.
+
+boot:
+  # Your system disk. Attached read-only (as a snapshot) on AHCI port 0.
+  # The assets disk is AHCI port 1, the data disk AHCI port 2
+  # (on Linux usually /dev/sda, /dev/sdb, /dev/sdc).
+  system_image: build/system.img
+  # Optional: boot with QEMU -kernel instead of from the disk. This counts
+  # as a stock boot path (0 esotericism for the boot layer).
+  kernel: build/images/bzImage
+  # initrd: build/initramfs.cpio.gz
+  append: "console=ttyS0 root=/dev/sda rw rootwait"
+
+# Regex (Python syntax, multi-line) matched against the end of the console
+# output to know that your shell is waiting for a command.
+prompt_regex: '# $'
+
+# Prints the concatenation of {a} and {b}. The split makes sure the
+# terminal echo of what was typed can never match.
+#   POSIX sh:  'echo {a}""{b}'        Plan 9 rc:  "echo {a}''{b}"
+nonce_command: 'echo {a}""{b}'
+
+# Kill the process with pid {pid} (L1), and power the machine off so that
+# QEMU exits within 15 s.
+kill_command: 'kill -9 {pid}'
+poweroff_command: 'poweroff -f'
+
+data:
+  # Run on every boot before the persistence step. The data disk is blank
+  # at the start of each run, so create a file system on first use.
+  setup:
+    - 'mkdir -p /mnt/data'
+    - 'mount /dev/sdc /mnt/data 2>/dev/null || { mke2fs -q /dev/sdc && mount /dev/sdc /mnt/data; }'
+  write: 'echo {nonce} > /mnt/data/nonce && sync'
+  read: 'cat /mnt/data/nonce'
+  size_mib: 64
+
+osprobe:
+  host_build: ['musl-gcc', '-static', '-O2', '-pthread', '-o', '{out}', '{src}']
+  # The assets disk holds a ustar archive with osprobe.c (fresh random seed
+  # every run) and, if host_build is set, your host-built binary "osprobe".
+  # host_build: optional argument list run on the host; {src} and {out}
+  # are replaced. Example for a static musl binary:
+  # host_build: ['musl-gcc', '-static', '-O2', '-pthread', '-o', '{out}', '{src}']
+  setup:
+    - 'mkdir -p /tmp/osprobe'
+    - 'tar -xf /dev/sdb -C /tmp/osprobe'
+  # Optional in-guest build (for example with TinyCC):
+  # build:
+  #   - 'tcc -o /tmp/osprobe/osprobe /tmp/osprobe/osprobe.c -lpthread'
+  run: '/tmp/osprobe/osprobe {check}'
+  # Hobby kernels without a POSIX layer: set native: true and bring your own
+  # program covering the same six primitives (reviewed by the judges).
+  # native: false
