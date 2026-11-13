@@ -317,9 +317,16 @@ The challenge submission requires:
 - `verify.yaml`.
 - Build configurations and scripts.
 - Architecture manifest, including the esotericism table and authored components.
-- Demonstration video (maximum five minutes).
+- Demonstration video (maximum five minutes; link below).
+- Unedited screen recording of the team's own public-test run (supporting evidence; link below).
 - Other deliverables specified in the OS Track common README.
 
+### Recording Links
+
+- Demo video (maximum five minutes): TODO — add recording link.
+- Unedited public-test run: TODO — add recording link.
+
+The clean-checkout rebuild must be verified before final submission.
 The final verification results should be retained as supporting evidence.
 
 ## 10. Conclusion
@@ -328,4 +335,4 @@ The Cat-V Minimalist Stack implementation successfully passed all five official 
 
 The final implementation demonstrates successful booting, service supervision, operating-system primitives, persistent storage and two-worker multiprocessing performance.
 
-**Project implementation and 10-run verification: COMPLETE.**
+**Core implementation and 10-run verification: COMPLETE; submission preparation remains in progress.**
