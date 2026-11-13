@@ -324,7 +324,9 @@ The challenge submission requires:
 ### Recording Links
 
 - Demo video (maximum five minutes): TODO — add recording link.
-- Unedited public-test run: TODO — add recording link.
+- Unedited public-test run: TODO — add recording link [Watch the unedited 10-run verification recording](https://drive.google.com/file/d/1gQEh1ck8i5JIy5QCoSrp-uIYTTiFvZFS/view?usp=drivesdk)
+
+This recording provides evidence of the official public-test verification run.
 
 The clean-checkout rebuild must be verified before final submission.
 The final verification results should be retained as supporting evidence.
