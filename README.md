@@ -323,8 +323,8 @@ The challenge submission requires:
 
 ### Recording Links
 
-- Demo video (maximum five minutes): TODO — add recording link.
-- Unedited public-test run: TODO — add recording link [Watch the unedited 10-run verification recording](https://drive.google.com/file/d/1gQEh1ck8i5JIy5QCoSrp-uIYTTiFvZFS/view?usp=drivesdk)
+- Powerpoint ppt link:[Interactive slides] (https://docs.google.com/presentation/d/1cIf8x_BkCMUOmEstNPFRk3ydADB6AQtl/edit?usp=drivesdk&ouid=109062390126439412021&rtpof=true&sd=true) 
+- Unedited public-test run:  [Watch the unedited 3 times -run verification recording](https://drive.google.com/file/d/1gQEh1ck8i5JIy5QCoSrp-uIYTTiFvZFS/view?usp=drivesdk)
 
 This recording provides evidence of the official public-test verification run.
 
